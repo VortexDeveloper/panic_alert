@@ -29,5 +29,10 @@ module PanicAlert
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    config.middleware.insert_after ActionDispatch::Callbacks, Warden::Manager do |manager|
+      manager.default_strategies :auth_token, :basic_auth
+      manager.failure_app = UnauthorizedController
+    end
   end
 end
