@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate!, except: [:login]
+  before_action :authenticate!, except: [:login, :sign_up]
 
   def login
     sign_in
@@ -9,7 +9,29 @@ class UsersController < ApplicationController
     sign_out
   end
 
+  def sign_up
+    @user = User.new(user_params)
+
+    if @user.save
+      warden.set_user @user
+      sign_in
+    else
+      render json: @user.errors, status: :unprocessable_entity
+    end
+  end
+
   def after_sign_in_do
     render json: {authentication_token: current_user.authentication_token, user: current_user.as_json}
+  end
+
+  private
+  def user_params
+    params.require(:user).permit(
+      :name,
+      :username,
+      :email,
+      :password,
+      :password_confirmation
+    )
   end
 end
