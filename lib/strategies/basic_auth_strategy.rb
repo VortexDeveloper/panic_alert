@@ -10,9 +10,8 @@ class BasicAuthStrategy < ::Warden::Strategies::Base
 
   def authenticate!
     params = JWTWrapper.first_decode(request.env['HTTP_AUTHORIZATION'].gsub('Basic ', ''))
-    byebug
-    
-    user = User.find_by_username(params["username"])
+
+    user = User.find_by_email_or_username(params["username"])
     if user && user.authenticate(params["password"])
       success!(user)
     else
