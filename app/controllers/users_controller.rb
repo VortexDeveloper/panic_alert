@@ -21,7 +21,16 @@ class UsersController < ApplicationController
   end
 
   def after_sign_in_do
-    render json: {authentication_token: current_user.authentication_token, user: current_user.as_json}
+    render json: {authentication_token: JWT.encode(current_user.authentication_token, nil, false), user: current_user.as_json}
+  end
+
+  def send_support_email
+    begin
+      UserMailer.send_support_email(current_user, params[:message]).deliver
+      head :no_content
+    rescue => e
+      render json: e.message, status: 422
+    end
   end
 
   private
