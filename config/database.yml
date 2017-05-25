@@ -22,8 +22,8 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 local: &local
-  # username: vortex
-  username: thiago
+  username: vortex
+  # username: thiago
 
 development:
   <<: *default

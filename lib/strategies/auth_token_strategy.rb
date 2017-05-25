@@ -10,6 +10,7 @@ class AuthTokenStrategy < ::Warden::Strategies::Base
 
   private
   def authentication_token
+    # request.headers['Authorization'].present?
     params['authentication_token']
   end
 end
