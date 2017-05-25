@@ -1,0 +1,14 @@
+<h1><%= "Requisição de Suporte enviada por #{@user.name} #{@user.username}" %></h1>
+
+<h2>Informações: </h2>
+
+<p>
+  Nome do Usuários: <%= "#{@user.name} #{@user.username}" %>
+</p>
+<p>
+  Email: <%= "#{@user.email}" %>
+</p>
+<p>
+  Mensagem: <br/>
+  <%= @message %>
+</p>
