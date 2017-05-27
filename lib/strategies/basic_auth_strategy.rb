@@ -1,21 +1,22 @@
 require 'jwt_wrapper'
+require_relative 'strategies_helper.rb'
+
 class BasicAuthStrategy < ::Warden::Strategies::Base
-  def auth
-    @auth ||= Rack::Auth::Basic::Request.new(env)
-  end
+  include StrategiesHelper
 
   def valid?
-    auth.provided? && auth.basic? && request.env['HTTP_AUTHORIZATION'].present?
+    auth.provided? #&& auth.basic? && request.env['HTTP_AUTHORIZATION'].present?
   end
 
   def authenticate!
-    params = JWTWrapper.first_decode(request.env['HTTP_AUTHORIZATION'].gsub('Basic ', ''))
+    params = token_decoded('Basic')
+    params ||= token_decoded('Bearer')
+
+    byebug
 
     user = User.find_by_email_or_username(params["username"])
-    if user && user.authenticate(params["password"])
-      success!(user)
-    else
-      fail!('strategies.basic_auth.failed')
-    end
+
+    return success!(user) if user && user.authenticate(params["password"])
+    fail!('strategies.basic_auth.failed')
   end
 end
