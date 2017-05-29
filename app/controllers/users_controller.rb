@@ -20,15 +20,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def after_sign_in_do
-    auth_token = JWT.encode(current_user.authentication_token, nil, false)
-    byebug
-    render json: {
-      authentication_token: auth_token,
-      user: current_user.as_json
-    }
-  end
-
   def send_support_email
     begin
       UserMailer.send_support_email(current_user, params[:message]).deliver
@@ -36,6 +27,14 @@ class UsersController < ApplicationController
     rescue => e
       render json: e.message, status: 422
     end
+  end
+
+  def after_sign_in_do
+    auth_token = JWT.encode(current_user.authentication_token, nil, false)
+    render json: {
+      authentication_token: auth_token,
+      user: current_user.as_json
+    }
   end
 
   private

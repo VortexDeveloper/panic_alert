@@ -30,12 +30,11 @@ gem 'bcrypt'
 gem 'jwt'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'awesome_print'
-gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 
-# group :development, :test do
-#   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-#   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-# end
+group :development, :test do
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+end
 
 group :development do
   gem 'listen', '>= 3.0.5', '< 3.2'
