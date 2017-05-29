@@ -22,8 +22,9 @@ class UsersController < ApplicationController
 
   def after_sign_in_do
     auth_token = JWT.encode(current_user.authentication_token, nil, false)
+    byebug
     render json: {
-      authentication_token: auth_token, 
+      authentication_token: auth_token,
       user: current_user.as_json
     }
   end
