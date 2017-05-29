@@ -20,6 +20,37 @@ class ContactsController < ApplicationController
     end
   end
 
+  def open_requests
+    render json: {list: current_user.pending_dependent_requests}
+  end
+
+  def drop_contact
+    contact = User.find params[:contact_id]
+
+    if contact
+      current_user.drop_contact contact
+      render json: {list: current_user.accepted_dependent_requests}
+    end
+  end
+
+  def refuse_request
+    contact = User.find params[:contact_id]
+
+    if contact
+      current_user.refuse_emergency_contact_of contact
+      head :no_content
+    end
+  end
+
+  def accept_request
+    contact = User.find params[:contact_id]
+
+    if contact
+      current_user.accept_emergency_contact_of contact
+      head :no_content
+    end
+  end
+
   private
   def contact_params
     params.require(:contact).permit(:name, numbers: [:value, :type])

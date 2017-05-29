@@ -49,7 +49,7 @@ class User < ApplicationRecord
     emergency_contact_request_of(contact).accept!
   end
 
-  def refuse_friendship_of contact
+  def refuse_emergency_contact_of contact
     emergency_contact_request_of(contact).refuse!
   end
 

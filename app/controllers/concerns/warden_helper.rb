@@ -26,7 +26,7 @@ module WardenHelper
   end
 
   def sign_in
-    byebug
+    # byebug
     if authenticate!
       after_sign_in_do
     else
