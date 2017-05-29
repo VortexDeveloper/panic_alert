@@ -22,8 +22,8 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 local: &local
-  # username: vortex
-  username: thiago
+  username: vortex
+  # username: thiago
 
 development:
   <<: *default
@@ -86,6 +86,6 @@ test:
 #
 production:
   <<: *default
-  database: panic_alert_production
-  username: panic_alert
-  password: <%= ENV['PANIC_ALERT_DATABASE_PASSWORD'] %>
+  database: alertadepanico_production
+  username: alertadepanico
+  password: <%= ENV['ALERTADEPANICO_DATABASE_PASSWORD'] %>
