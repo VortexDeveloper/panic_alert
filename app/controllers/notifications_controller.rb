@@ -15,7 +15,7 @@ class NotificationsController < ApplicationController
           body: "This offer expires at 11:30 or whatever",
           notId: 10,
           surveyID: "ewtawgreg-gragrag-rgarhthgbad",
-          content-available: "1"
+          content_available: "1"
         }
       }
     )
