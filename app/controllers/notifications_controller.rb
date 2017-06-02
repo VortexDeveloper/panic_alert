@@ -19,6 +19,7 @@ class NotificationsController < ApplicationController
         }
       }
     )
+    logger.info "[NOTIFIER] #{notification.as_json}"
     notification.send
 
     head :no_content
