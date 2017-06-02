@@ -7,8 +7,7 @@ class NotificationsController < ApplicationController
     end
     notification = IonicNotification::Notification.new(
       tokens: device_tokens,
-      message: "Teste",
-      title: "Alerta de Pânico"
+      message: "Teste"
     )
     notification.send
 
