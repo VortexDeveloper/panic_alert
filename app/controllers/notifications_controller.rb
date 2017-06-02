@@ -5,7 +5,7 @@ class NotificationsController < ApplicationController
     device_tokens = current_user.accepted_dependent_requests.map do |u|
       u.device_token if u.device_token.present?
     end
-    byebug
+    logger.info "[TOKENS] #{device_tokens}"
     notification = IonicNotification::Notification.new(
       tokens: device_tokens,
       message: notifications_params[:message],
