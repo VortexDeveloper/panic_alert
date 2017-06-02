@@ -7,9 +7,9 @@ class NotificationsController < ApplicationController
     end
     notification = IonicNotification::Notification.new(
       tokens: device_tokens,
-      message: "Teste"
+      message: "Está pedindo sua ajuda",
+      title: "Pânico do Alerta | #{current_user.name}"
     )
-    logger.info "[Notifier] #{notification.as_json}"
     notification.send
 
     head :no_content
