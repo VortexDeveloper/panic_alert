@@ -12,15 +12,13 @@ class NotificationsController < ApplicationController
       "force-start": 1,
       payload: {
         data: {
-          title: "Test Notification",
-          body: "This offer expires at 11:30 or whatever",
+          title: "Pânico do Alerta | #{current_user.name}",
+          body: "Está pedindo sua ajuda",
           notId: 10,
           'content-available': '1'
         }
       }
     )
-    logger.info "[NOTIFIER] #{notification.as_json}"
-    logger.info "[NOTIFIER] #{notification.send.as_json}"
 
     head :no_content
   end
