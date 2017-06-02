@@ -9,13 +9,13 @@ class NotificationsController < ApplicationController
       tokens: device_tokens,
       message: "Está pedindo sua ajuda",
       title: "Pânico do Alerta | #{current_user.name}",
+      "content-available": "1"
       payload: {
         data: {
           title: "Test Notification",
           body: "This offer expires at 11:30 or whatever",
           notId: 10,
-          surveyID: "ewtawgreg-gragrag-rgarhthgbad",
-          content_available: "1"
+          surveyID: "ewtawgreg-gragrag-rgarhthgbad"
         }
       }
     )
