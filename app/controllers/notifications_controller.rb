@@ -9,6 +9,7 @@ class NotificationsController < ApplicationController
       tokens: device_tokens,
       message: "Teste"
     )
+    logger.info "[Notifier] #{notification.as_json}"
     notification.send
 
     head :no_content
