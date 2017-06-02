@@ -14,7 +14,7 @@ class NotificationsController < ApplicationController
           title: "Test Notification",
           body: "This offer expires at 11:30 or whatever",
           notId: 10,
-          content_available: "1",
+          'content-available': 1,
           surveyID: "ewtawgreg-gragrag-rgarhthgbad"
         }
       }
