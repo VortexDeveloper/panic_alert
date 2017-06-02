@@ -8,7 +8,15 @@ class NotificationsController < ApplicationController
     notification = IonicNotification::Notification.new(
       tokens: device_tokens,
       message: "Está pedindo sua ajuda",
-      title: "Pânico do Alerta | #{current_user.name}"
+      title: "Pânico do Alerta | #{current_user.name}",
+      payload: {
+        data: {
+          title: "Test Notification",
+          body: "This offer expires at 11:30 or whatever",
+          notId: 10,
+          surveyID: "ewtawgreg-gragrag-rgarhthgbad"
+        }
+      }
     )
     notification.send
 
