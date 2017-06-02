@@ -36,7 +36,30 @@ class UsersController < ApplicationController
     }
   end
 
+  def save_notification_token
+    token_params = notification_token_params
+
+    if token_params[:registered]
+      current_user.device_token = token_params[:token]
+      current_user.device_type = token_params[:type]
+      current_user.save
+
+      head :no_content
+    else
+      render json: current_user.errors, status: 422
+    end
+  end
+
   private
+
+  def notification_token_params
+    params.require(:user).permit(
+      :token,
+      :type,
+      :registered
+    )
+  end
+
   def user_params
     params.require(:user).permit(
       :name,

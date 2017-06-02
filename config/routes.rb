@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   post 'users/sign_up'
   get 'users/sign_out'
   get 'users/send_support_email'
+  post 'users/save_notification_token'
 
   resources :contacts, only: [:create, :index] do
     collection do
@@ -13,6 +14,8 @@ Rails.application.routes.draw do
     get 'refuse_request'
     get 'accept_request'
   end
+
+  resources :notifications, only: [:create]
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'application#home'

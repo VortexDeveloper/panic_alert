@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170525183224) do
+ActiveRecord::Schema.define(version: 20170601210514) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,8 @@ ActiveRecord::Schema.define(version: 20170525183224) do
     t.string "authentication_token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "device_token"
+    t.text "device_type"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
     t.index ["cellphone"], name: "index_users_on_cellphone", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true

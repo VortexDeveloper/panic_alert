@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+  # Include IonicNotification behaviour
+  include IonicNotification::Concerns::IonicNotificable
+  
   has_many :contacts, dependent: :destroy
   has_many :emergency_contacts, :through => :contacts, dependent: :destroy
 

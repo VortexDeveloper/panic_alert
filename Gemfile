@@ -25,11 +25,13 @@ gem 'puma', '~> 3.7'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
 
+gem 'dotenv-rails', groups: [:development, :test]
 gem 'warden'
 gem 'bcrypt'
 gem 'jwt'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'awesome_print'
+gem 'ionic_notification', github: 'tururay/ionic_notification'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

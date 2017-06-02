@@ -17,7 +17,7 @@ class AuthTokenStrategy < ::Warden::Strategies::Base
       return success!(user) if user && user.authenticate(auth["password"])
       fail!('strategies.basic_auth.failed')
     else
-      user = User.find_by_authentication_token(authentication_token)
+      user = User.find_by_authentication_token(auth['token'])
       user.nil? ? fail!('strategies.authentication_token.failed') : success!(user)
     end
   end
