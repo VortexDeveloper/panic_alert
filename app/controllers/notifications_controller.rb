@@ -9,7 +9,7 @@ class NotificationsController < ApplicationController
       tokens: device_tokens,
       message: "Está pedindo sua ajuda",
       title: "Pânico do Alerta | #{current_user.name}",
-      "content-available": "1"
+      "content-available": "1",
       payload: {
         data: {
           title: "Test Notification",
