@@ -65,6 +65,8 @@ class UsersController < ApplicationController
       :name,
       :username,
       :email,
+      :phone_number,
+      :ddd,
       :password,
       :password_confirmation
     )

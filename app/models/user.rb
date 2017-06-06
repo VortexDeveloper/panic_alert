@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   # Include IonicNotification behaviour
   include IonicNotification::Concerns::IonicNotificable
-  
+
   has_many :contacts, dependent: :destroy
   has_many :emergency_contacts, :through => :contacts, dependent: :destroy
 
@@ -11,6 +11,10 @@ class User < ApplicationRecord
   after_validation { self.errors.messages.delete(:password_digest) }
 
   scope :by_email_or_username, ->(param) { where("username = :param OR email = :param", param: param) }
+
+  validates :email, :username, :phone_number, presence: true, uniqueness: true
+  validates :ddd, presence: true, length: { is: 2 }, numericality: true
+  validates :phone_number, length: { in: 8..9}, numericality: true
 
   def logout
   end
@@ -31,11 +35,11 @@ class User < ApplicationRecord
 
   # EMERGENCY CONTACT SEARCHES
   def accepted_dependent_requests
-    emergency_contacts.where(contacts: { status: :accept })
+    emergency_contacts.select('users.*, contacts.display_name').where(contacts: { status: :accept })
   end
 
   def refused_dependent_requests
-    emergency_contacts.where(contacts: { status: :refuse })
+    emergency_contacts.select('users.*, contacts.display_name').where(contacts: { status: :refuse })
   end
 
   def pending_dependent_requests

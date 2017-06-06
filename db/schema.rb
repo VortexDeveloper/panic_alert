@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170601210514) do
+ActiveRecord::Schema.define(version: 20170606211240) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20170601210514) do
     t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "display_name"
     t.index ["user_id"], name: "index_contacts_on_user_id"
   end
 
@@ -29,15 +30,16 @@ ActiveRecord::Schema.define(version: 20170601210514) do
     t.string "username"
     t.string "email"
     t.string "password_digest"
-    t.string "cellphone"
+    t.string "phone_number", limit: 9, null: false
     t.string "authentication_token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "device_token"
     t.text "device_type"
+    t.string "ddd", limit: 2, null: false
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
-    t.index ["cellphone"], name: "index_users_on_cellphone", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["phone_number"], name: "index_users_on_phone_number", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
