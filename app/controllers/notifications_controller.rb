@@ -19,6 +19,7 @@ class NotificationsController < ApplicationController
         }
       }
     )
+    notification.send
 
     head :no_content
   end

@@ -4,6 +4,8 @@ class User < ApplicationRecord
 
   has_many :contacts, dependent: :destroy
   has_many :emergency_contacts, :through => :contacts, dependent: :destroy
+  has_many :notification_users, class_name: 'NotificationUser', dependent: :destroy
+  has_many :notifications, through: :notification_users, dependent: :destroy
 
   has_secure_password
 

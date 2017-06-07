@@ -9,10 +9,10 @@ class ContactsController < ApplicationController
     numbers = contact_numbers(params[:contact][:numbers])
     contact = User.where('ddd || phone_number = :number', number: numbers).first
 
-    if contact
-      current_user.add_for_emergency_contact(contact)
+    if contact && current_user.add_for_emergency_contact(contact)
       save_display_name(contact, params[:contact][:display_name])
-      
+      send_notification_to(contact, "#{current_user.name} te adicionou como contato de emergência")
+
       render json: {
         list: current_user.accepted_dependent_requests,
         message: "Solicitação foi enviada para #{params[:contact][:display_name]}"
@@ -47,8 +47,8 @@ class ContactsController < ApplicationController
   def accept_request
     contact = User.find params[:contact_id]
 
-    if contact
-      current_user.accept_emergency_contact_of contact
+    if contact && current_user.accept_emergency_contact_of(contact)
+      send_notification_to(contact, "#{current_user.name} aceitou ser seu contato de emergência")
       head :no_content
     end
   end
@@ -58,23 +58,20 @@ class ContactsController < ApplicationController
     params.require(:contact).permit(:name, :display_name, numbers: [:value, :type])
   end
 
-  def valid_phone_number?(number)
-    return true if number.size >= 10
-    false
-  end
-
   def code_and_phone_number(unformatted_number)
     number = unformatted_number.gsub(/([[:space:]]|\-|\+)/, '')
     if number.starts_with? "55"
       [number[2..3], number[4..-1]]
-    else
+    elsif number.size >= 10
       [number[0..1], number[2..-1]]
+    else
+      [current_user.ddd, number]
     end
   end
 
   def contact_numbers(numbers)
     numbers.map do |info|
-      if info[:type]=='mobile' && valid_phone_number?(info[:value])
+      if info[:type]=='mobile'
         code_and_phone_number(info[:value]).join
       end
     end
@@ -84,5 +81,30 @@ class ContactsController < ApplicationController
     relation = Contact.where(user: current_user, emergency_contact: contact).first
     relation.display_name = display_name
     relation.save
+  end
+
+  def send_notification_to(contact, message)
+    notification = IonicNotification::Notification.new(
+      tokens: contact.device_token || [],
+      message: message,
+      title: "Pânico do Alerta",
+      payload: {
+        data: {
+          title: "Pânico do Alerta",
+          body: "message",
+          notId: 10
+        }
+      }
+    )
+    notification.send if contact.device_token.present?
+    save_user_notification(notification, contact)
+  end
+
+  def save_user_notification(notification, contact)
+    contact.notifications.create(
+      notification.as_json.select do |key, value|
+        Notification.column_names.include? key
+      end
+    )
   end
 end
