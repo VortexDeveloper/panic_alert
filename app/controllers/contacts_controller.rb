@@ -11,7 +11,12 @@ class ContactsController < ApplicationController
 
     if contact && current_user.add_for_emergency_contact(contact)
       save_display_name(contact, params[:contact][:display_name])
-      send_notification_to(contact, "#{current_user.name} te adicionou como contato de emergência")
+      send_notification_to(
+        contact,
+        "#{current_user.name} te adicionou como contato de emergência",
+        {kind: params[:contact][:kind]},
+        params[:contact][:kind]
+      )
 
       render json: {
         list: current_user.accepted_dependent_requests,
@@ -48,7 +53,12 @@ class ContactsController < ApplicationController
     contact = User.find params[:contact_id]
 
     if contact && current_user.accept_emergency_contact_of(contact)
-      send_notification_to(contact, "#{current_user.name} aceitou ser seu contato de emergência")
+      send_notification_to(
+        contact,
+        "#{current_user.name} aceitou ser seu contato de emergência",
+        {kind: params[:kind]},
+        params[:kind]
+        )
       head :no_content
     end
   end
@@ -83,28 +93,32 @@ class ContactsController < ApplicationController
     relation.save
   end
 
-  def send_notification_to(contact, message)
-    notification = IonicNotification::Notification.new(
+  def send_notification_to(contact, message, add_to_payload, kind)
+    notification_options = {
       tokens: contact.device_token || [],
       message: message,
       title: "Pânico do Alerta",
       payload: {
         data: {
           title: "Pânico do Alerta",
-          body: "message",
+          body: message,
           notId: 10
         }
       }
-    )
+    }
+    notification_options[:payload][:data].merge!(add_to_payload)
+    notification = IonicNotification::Notification.new(notification_options)
     notification.send if contact.device_token.present?
-    save_user_notification(notification, contact)
+
+    save_user_notification(notification, contact, kind)
   end
 
-  def save_user_notification(notification, contact)
-    contact.notifications.create(
-      notification.as_json.select do |key, value|
-        Notification.column_names.include? key
-      end
-    )
+  def save_user_notification(notification, contact, kind)
+    features = notification.as_json.select do |key, value|
+      Notification.column_names.include? key
+    end
+    features[:sender] = current_user
+    features[:kind] = kind
+    contact.notifications.create(features)
   end
 end

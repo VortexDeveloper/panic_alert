@@ -41,5 +41,12 @@ module PanicAlert
       manager.default_strategies :auth_token, :basic_auth
       manager.failure_app = UnauthorizedController
     end
+
+
+    Date::DATE_FORMATS[:default] = "%d/%m/%Y"
+    Time::DATE_FORMATS[:default] = "%d/%m/%Y %H:%M"
+    DateTime::DATE_FORMATS[:default] = "%d/%m/%Y %H:%M"
+
+    config.time_zone = 'Brasilia'
   end
 end

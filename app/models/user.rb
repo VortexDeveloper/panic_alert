@@ -70,6 +70,14 @@ class User < ApplicationRecord
   #   emergency_contacts.include?(contact) && friendship_between(user).pending?
   # end
 
+  def complete_phone_number
+    "+55#{ddd}#{phone_number}"
+  end
+
+  def sender_display_name(user)
+    sender ||= user
+  end
+
   private
   # Generate a session token
   def generate_authentication_token!
