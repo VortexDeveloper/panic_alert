@@ -119,6 +119,7 @@ class ContactsController < ApplicationController
     end
     features[:sender] = current_user
     features[:kind] = kind
+    features[:payload] = features[:payload].to_json
     contact.notifications.create(features)
   end
 end
