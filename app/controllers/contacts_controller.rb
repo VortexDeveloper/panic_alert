@@ -6,8 +6,8 @@ class ContactsController < ApplicationController
   end
 
   def create
-    numbers = contact_numbers(params[:contact][:numbers])
-    contact = User.where('ddd || phone_number = :number', number: numbers).first
+    numbers = contact_numbers(params[:contact][:numbers]).uniq
+    contact = User.where('ddd || phone_number IN (:number)', number: numbers).first
 
     if contact && current_user.add_for_emergency_contact(contact)
       save_display_name(contact, params[:contact][:display_name])
