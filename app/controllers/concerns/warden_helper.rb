@@ -26,11 +26,10 @@ module WardenHelper
   end
 
   def sign_in
-    # byebug
     if authenticate!
       after_sign_in_do
     else
-      render json: {errors: { message: "Unauthorized Credentials" }}
+      render json: {errors: { message: "Login ou senha inválidos, por favor tente novamente." }}
     end
   end
 
