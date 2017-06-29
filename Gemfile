@@ -33,6 +33,7 @@ gem 'jwt'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'awesome_print'
 gem 'ionic_notification', github: 'tururay/ionic_notification'
+gem 'rails-i18n', '~> 5.0.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
