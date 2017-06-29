@@ -47,6 +47,10 @@ module PanicAlert
     Time::DATE_FORMATS[:default] = "%d/%m/%Y %H:%M"
     DateTime::DATE_FORMATS[:default] = "%d/%m/%Y %H:%M"
 
+    Date::DATE_FORMATS[:for_code] = "%d%m%Y"
+    Time::DATE_FORMATS[:for_code] = "%d%m%Y%H%M%S"
+    DateTime::DATE_FORMATS[:for_code] = "%d%m%Y%H%M%S"
+
     config.time_zone = 'Brasilia'
   end
 end

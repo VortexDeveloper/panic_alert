@@ -1,4 +1,6 @@
 class NotificationsController < ApplicationController
+  include NotificationHelper
+
   before_action :authenticate!
 
   def index
@@ -34,6 +36,11 @@ class NotificationsController < ApplicationController
 
   end
 
+  def update
+    @notification_user = NotificationUser.find_by_user_and_code(current_user, params[:code])
+    @notification_user.received!
+  end
+
   private
 
   def notifications_params
@@ -44,6 +51,7 @@ class NotificationsController < ApplicationController
   end
 
   def send_notification_to(contacts, message, add_to_payload, kind)
+    notification_code = DateTime.now.to_s :for_code
     device_tokens = contacts.map(&:device_token).compact
     notification_options = {
       tokens: device_tokens || [],
@@ -53,9 +61,12 @@ class NotificationsController < ApplicationController
       payload: {
         data: {
           title: "Pânico do Alerta",
-          body: message,
-          notId: 10,
-          'content-available': '1'
+          'content-available': '1',
+          notId: notification_code,
+          soundname: 'panic_scream',
+          ledColor: [255, 0, 0, 0],
+          image: 'https://dl.dropboxusercontent.com/u/887989/antshot.png',
+          'image-type': 'circle'
         }
       }
     }
@@ -64,18 +75,6 @@ class NotificationsController < ApplicationController
 
     notification = IonicNotification::Notification.new(notification_options)
     notification.send if device_tokens.present?
-    save_user_notification(notification, contacts, kind)
-  end
-
-  def save_user_notification(notification, contacts, kind)
-    contacts.each do |contact|
-      features = notification.as_json.select do |key, value|
-        Notification.column_names.include? key
-      end
-      features[:sender] = current_user
-      features[:kind] = kind
-      features[:payload] = features[:payload].to_json
-      contact.notifications.create(features)
-    end
+    save_user_notification(notification, contacts, kind, notification_code)
   end
 end

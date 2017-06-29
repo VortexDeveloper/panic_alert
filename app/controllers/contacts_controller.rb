@@ -1,4 +1,6 @@
 class ContactsController < ApplicationController
+  include NotificationHelper
+
   before_action :authenticate!
 
   def index
@@ -94,6 +96,7 @@ class ContactsController < ApplicationController
   end
 
   def send_notification_to(contact, message, add_to_payload, kind)
+    notification_code = DateTime.now.to_s :for_code
     notification_options = {
       tokens: contact.device_token || [],
       message: message,
@@ -101,6 +104,7 @@ class ContactsController < ApplicationController
       payload: {
         data: {
           title: "Pânico do Alerta",
+          notId: notification_code,
           body: message,
           notId: 10
         }
@@ -110,16 +114,6 @@ class ContactsController < ApplicationController
     notification = IonicNotification::Notification.new(notification_options)
     notification.send if contact.device_token.present?
 
-    save_user_notification(notification, contact, kind)
-  end
-
-  def save_user_notification(notification, contact, kind)
-    features = notification.as_json.select do |key, value|
-      Notification.column_names.include? key
-    end
-    features[:sender] = current_user
-    features[:kind] = kind
-    features[:payload] = features[:payload].to_json
-    contact.notifications.create(features)
+    save_user_notification(notification, contact, kind, notification_code)
   end
 end

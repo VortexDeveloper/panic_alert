@@ -50,6 +50,11 @@ class UsersController < ApplicationController
     end
   end
 
+  def my_help_requests
+    @help_requests = current_user.my_help_requests
+    # render json: @help_requests.as_json(include: :notification_users)
+  end
+
   private
 
   def notification_token_params

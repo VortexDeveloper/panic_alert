@@ -64,6 +64,9 @@ GEM
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.8.1)
+    jbuilder (2.7.0)
+      activesupport (>= 4.2.0)
+      multi_json (>= 1.2)
     json (1.8.6)
     jwt (1.5.6)
     listen (3.1.5)
@@ -80,6 +83,7 @@ GEM
     mime-types-data (3.2016.0521)
     mini_portile2 (2.1.0)
     minitest (5.10.2)
+    multi_json (1.12.1)
     multi_xml (0.6.0)
     nio4r (2.0.0)
     nokogiri (1.7.2)
@@ -149,6 +153,7 @@ DEPENDENCIES
   byebug
   dotenv-rails
   ionic_notification!
+  jbuilder (~> 2.5)
   jwt
   listen (>= 3.0.5, < 3.2)
   pg
@@ -164,4 +169,4 @@ RUBY VERSION
    ruby 2.4.0p0
 
 BUNDLED WITH
-   1.15.0
+   1.15.1

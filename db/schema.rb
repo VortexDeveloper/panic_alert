@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170609193900) do
+ActiveRecord::Schema.define(version: 20170629054621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,11 +27,12 @@ ActiveRecord::Schema.define(version: 20170609193900) do
 
   create_table "notification_users", force: :cascade do |t|
     t.bigint "notification_id"
-    t.bigint "user_id"
+    t.bigint "destiny_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "status"
+    t.index ["destiny_id"], name: "index_notification_users_on_destiny_id"
     t.index ["notification_id"], name: "index_notification_users_on_notification_id"
-    t.index ["user_id"], name: "index_notification_users_on_user_id"
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -46,6 +47,7 @@ ActiveRecord::Schema.define(version: 20170609193900) do
     t.datetime "updated_at", null: false
     t.bigint "sender_id"
     t.string "kind"
+    t.string "code"
     t.index ["sender_id"], name: "index_notifications_on_sender_id"
   end
 
@@ -69,6 +71,6 @@ ActiveRecord::Schema.define(version: 20170609193900) do
 
   add_foreign_key "contacts", "users"
   add_foreign_key "notification_users", "notifications"
-  add_foreign_key "notification_users", "users"
+  add_foreign_key "notification_users", "users", column: "destiny_id"
   add_foreign_key "notifications", "users", column: "sender_id"
 end

@@ -2,14 +2,14 @@ class User < ApplicationRecord
   # Include IonicNotification behaviour
   include IonicNotification::Concerns::IonicNotificable
 
-  has_many :contacts, dependent: :destroy
+  has_many :notifications
+  has_many :contacts
   has_many :emergency_contacts, :through => :contacts, dependent: :destroy
-  has_many :notification_users, class_name: 'NotificationUser', dependent: :destroy
-  has_many :notifications, through: :notification_users, dependent: :destroy
 
   has_secure_password
 
   after_create :generate_authentication_token!
+  before_validation :remove_extremity_whitespace, on: :create
   after_validation { self.errors.messages.delete(:password_digest) }
 
   scope :by_email_or_username, ->(param) { where("username = :param OR email = :param", param: param) }
@@ -17,6 +17,7 @@ class User < ApplicationRecord
   validates :email, :username, :phone_number, presence: true, uniqueness: true
   validates :ddd, presence: true, length: { is: 2 }, numericality: true
   validates :phone_number, length: { in: 8..9}, numericality: true
+  validates :username, format: { without: /\s/ }
 
   def logout
   end
@@ -78,6 +79,10 @@ class User < ApplicationRecord
     sender ||= user
   end
 
+  def my_help_requests
+    Notification.help_requests_by(self).includes(:notification_users)
+  end
+
   private
   # Generate a session token
   def generate_authentication_token!
@@ -92,4 +97,8 @@ class User < ApplicationRecord
   # def friendship_between friend
   #   friendships.where(friend: friend).first
   # end
+
+  def remove_extremity_whitespace
+    self.username = self.username.strip
+  end
 end
