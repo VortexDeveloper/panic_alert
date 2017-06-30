@@ -7,7 +7,7 @@ class Notification < ApplicationRecord
   scope :help_requests_by, ->(user) { where(sender: user, kind: :help_request).order(created_at: :desc) }
 
   def sender_display_name
-    contact = Contact.where(user: users.first, emergency_contact: sender).first
+    contact = Contact.where(user: destinies.first, emergency_contact: sender).first
     return contact.display_name if contact.present? && contact.display_name.present?
     sender.name
   end

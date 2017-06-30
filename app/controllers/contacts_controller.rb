@@ -13,12 +13,8 @@ class ContactsController < ApplicationController
 
     if contact && current_user.add_for_emergency_contact(contact)
       save_display_name(contact, params[:contact][:display_name])
-      send_notification_to(
-        contact,
-        "#{current_user.name} te adicionou como contato de emergência",
-        {kind: params[:contact][:kind]},
-        params[:contact][:kind]
-      )
+      add_to_payload = notification_options("#{current_user.name} te adicionou como contato de emergência")
+      send_notification_to contact, add_to_payload
 
       render json: {
         list: current_user.accepted_dependent_requests,
@@ -95,25 +91,15 @@ class ContactsController < ApplicationController
     relation.save
   end
 
-  def send_notification_to(contact, message, add_to_payload, kind)
-    notification_code = DateTime.now.to_s :for_code
+  def notification_options(message)
     notification_options = {
-      tokens: contact.device_token || [],
       message: message,
-      title: "Pânico do Alerta",
       payload: {
         data: {
-          title: "Pânico do Alerta",
-          notId: notification_code,
           body: message,
-          notId: 10
+          kind: params[:contact][:kind]
         }
       }
     }
-    notification_options[:payload][:data].merge!(add_to_payload)
-    notification = IonicNotification::Notification.new(notification_options)
-    notification.send if contact.device_token.present?
-
-    save_user_notification(notification, contact, kind, notification_code)
   end
 end

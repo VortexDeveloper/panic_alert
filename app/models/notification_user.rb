@@ -6,7 +6,9 @@ class NotificationUser < ApplicationRecord
 
   enum status: [:pending, :sent, :received]
 
-  scope :find_by_user_and_code, ->(user, code) { joins(:notification).where(user: user, notifications: {code: code}).first}
+  scope :find_by_destiny_and_code, ->(destiny, code) {
+    joins(:notification).where(destiny: destiny, notifications: {code: code}).first
+  }
 
   delegate :name, :username, :phone_number, to: :destiny
 

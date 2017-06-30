@@ -83,6 +83,10 @@ class User < ApplicationRecord
     Notification.help_requests_by(self).includes(:notification_users)
   end
 
+  def received_notifications
+    Notification.joins(:notification_users).where(notification_users: {destiny: self})
+  end
+
   private
   # Generate a session token
   def generate_authentication_token!
