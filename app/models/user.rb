@@ -20,6 +20,8 @@ class User < ApplicationRecord
   validates :username, format: { without: /\s/ }
 
   def logout
+    self.device_token = nil
+    self.save
   end
 
   def as_json(options = {})
@@ -33,7 +35,7 @@ class User < ApplicationRecord
   end
 
   def self.find_by_email_or_username(param)
-    by_email_or_username(param).first
+    by_email_or_username(param.strip).first
   end
 
   # EMERGENCY CONTACT SEARCHES
