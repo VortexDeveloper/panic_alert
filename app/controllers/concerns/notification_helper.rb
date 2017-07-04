@@ -13,10 +13,10 @@ module NotificationHelper
     device_tokens = ensure_contacts_type.map(&:device_token).compact
     notification_options = {
       tokens: device_tokens || [],
-      title: "Pânico do Alerta",
+      title: "Alerta do Pânico",
       payload: {
         data: {
-          title: "Pânico do Alerta",
+          title: "Alerta do Pânico",
           notId: @notification_code
         }
       }
